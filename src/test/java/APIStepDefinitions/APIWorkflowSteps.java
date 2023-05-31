@@ -8,6 +8,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.junit.Assert;
 
 import java.util.List;
 import java.util.Map;
@@ -117,9 +118,35 @@ public class APIWorkflowSteps {
            // another  enhanced for loop to get values and keys
            for(String key : keys){
               String expectedValue =  map.get(key);
+              String actualValue = actualData.get(key);
+               Assert.assertEquals(expectedValue,actualValue);
            }
 
        }
     }
 
+    //--------------------------------
+    @Given("a request is prepared to create an employee with dynamic data {string} , {string} , {string} , {string} , {string} , {string} , {string}")
+    public void a_request_is_prepared_to_create_an_employee_with_dynamic_data(String firstName, String lastName, String middleName, String gender, String birthDay, String status, String jobTitle) {
+        request = given().
+                header(APIConstants.HEADER_KEY_CONTENT_TYPE,APIConstants.HEADER_VALUE_CONTENT_TYPE).
+                header(APIConstants.HEADER_KEY_AUTHORIZATION,GenerateTokenStep.token).
+                body(APiPayloadConstants.createEmployeePayloadDynamic(firstName,lastName,middleName,gender,birthDay,status,jobTitle));
+    }
+
+    // ---- Update Employee
+
+    @Given("a request is prepared to update an employee")
+    public void a_request_is_prepared_to_update_an_employee() {
+        request=given().header(APIConstants.HEADER_KEY_CONTENT_TYPE,APIConstants.HEADER_VALUE_CONTENT_TYPE).
+                header(APIConstants.HEADER_KEY_AUTHORIZATION,GenerateTokenStep.token).body(APiPayloadConstants.updateEmployeePayloadJson());
+    }
+    @When("a PUT call is made to update an employee")
+    public void a_put_call_is_made_to_update_an_employee() {
+        response = request.when().put(APIConstants.UPDATE_EMPLOYEE_URI);
+    }
+    @Then("the status code of updated employee is {int}")
+    public void the_status_code_of_updated_employee_is(Integer int1) {
+       response.then().assertThat().statusCode(int1);
+    }
 }

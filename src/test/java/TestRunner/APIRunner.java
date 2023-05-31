@@ -8,8 +8,8 @@ import org.junit.runner.RunWith;
 @RunWith(Cucumber.class)
 @CucumberOptions(features="src/test/resources/features",
         glue="APIStepDefinitions" ,
-        dryRun = true,
-        tags="@getEmployee",
+        dryRun = false,
+        tags="@api",
         plugin={"pretty","html:target/Cucumber.html","json:target/Cucumber.json","rerun:target/failed.txt"}
 )
 public class APIRunner {

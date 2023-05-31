@@ -24,7 +24,7 @@ public class HardCodedExamples {
                 queryParam("employee_id",employee_id);
 
         // hitting the endPoint
-        Response response= preparedRequest.when().get("getOneEmployee.php");
+        Response response= preparedRequest.when().get("/getOneEmployee.php");
 
         response.prettyPrint();
 
